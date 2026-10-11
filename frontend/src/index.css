@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply h-full antialiased bg-dark-bg text-accent-light;
+    font-family: 'Poppins', 'Inter', sans-serif;
+  }
+  
+  #root {
+    @apply h-full;
+  }
+
+  /* Global select/option contrast fix */
+  select {
+    @apply bg-dark-surface text-white border-accent-border;
+  }
+  
+  option {
+    @apply bg-dark-surface text-white;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background-color: #1a1a1a;
+    border-radius: 1rem;
+    border: 1px solid #333333;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  /* Only apply lift/glow hover to cards that are explicitly interactive */
+  .glass-card-interactive:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(255, 107, 53, 0.15);
+    border-color: rgba(255, 107, 53, 0.3);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-dark-bg;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-accent-primary/50 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent-primary/80;
+  }
+
+  .glow-text {
+    background: linear-gradient(135deg, #ff6b35, #ffa500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  .glow-focus {
+    @apply focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary;
+  }
+
+  .coding-select {
+    @apply bg-[#1a1a1a] text-white border border-[#333333] rounded-lg px-3 py-2 text-sm outline-none transition-colors cursor-pointer appearance-none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1em;
+    padding-right: 2.5rem;
+  }
+
+  .coding-select:focus {
+    @apply border-accent-primary ring-1 ring-accent-primary/30;
+  }
+
+  /* Target options explicitly for browser consistency */
+  .coding-select option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+}
+
+/* Very subtle animated radial background mimicking particles-js */
+.animated-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a1a 100%);
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.1), transparent 70%);
+  animation: bg-pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes bg-pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}

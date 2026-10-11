@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Bite · Vinland</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        outfit: ['Outfit', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+        cinzel: ['Cinzel', 'Georgia', 'serif'],
+        rajdhani: ['Rajdhani', 'Outfit', 'sans-serif'],
+        cormorant: ['Cormorant Garamond', 'Cinzel', 'Georgia', 'serif']
+      }
+    }
+  }
+}
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&amp;family=Outfit:wght@300;400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Rajdhani:wght@500;600;700&amp;display=swap" rel="stylesheet">
+ </head>
+ <body class="theme-vinland h-full font-outfit text-[#E0D9D9] overflow-hidden" style="background:#432323;">
+  <!-- Full-bleed hero art + contrast overlays (readable dark UI on top) -->
+  <div class="vs-scene" aria-hidden="true">
+   <div class="vs-photo vs-photo--hero"></div>
+   <div class="vs-scene-bloom"></div>
+   <div class="vs-scene-vignette"></div>
+   <div class="vs-scene-aurora"></div>
+   <div class="vs-scene-grad"></div>
+   <div class="vs-scene-noise"></div>
+  </div>
+  <div class="app-bg" aria-hidden="true">
+   <div class="orb-bg" style="width:420px;height:420px;background:#2F5755;top:-110px;left:-90px;"></div>
+   <div class="orb-bg orb-bg--slow" style="width:380px;height:380px;background:#432323;bottom:-100px;right:-80px;"></div>
+   <div class="orb-bg orb-bg--pink" style="width:280px;height:280px;background:#432323;top:42%;left:50%;transform:translate(-50%,-50%);"></div>
+   <div class="orb-bg" style="width:240px;height:240px;background:#5A9690;top:58%;left:4%;opacity:0.09;"></div>
+   <div class="orb-bg orb-bg--slow" style="width:320px;height:320px;background:#2F5755;top:8%;right:10%;opacity:0.16;"></div>
+  </div>
+  <div class="fixed inset-0 grid-pattern pointer-events-none z-[1]" style="opacity:0.22" aria-hidden="true"></div>
+  <div class="emoji-float-layer" aria-hidden="true">
+   <span class="emoji-float animate-emoji-drift" style="left:6%;top:14%;">⛵</span>
+   <span class="emoji-float animate-emoji-drift-delayed" style="left:10%;top:42%;">🪓</span>
+   <span class="emoji-float animate-emoji-bounce-soft" style="left:78%;top:10%;">🛡️</span>
+   <span class="emoji-float animate-twinkle" style="left:86%;top:28%;">⚔️</span>
+   <span class="emoji-float animate-emoji-spin-slow" style="left:68%;top:46%;">🌊</span>
+   <span class="emoji-float--lg animate-emoji-drift" style="left:3%;top:56%;">❄️</span>
+   <span class="emoji-float animate-emoji-bounce-soft" style="left:48%;top:5%;animation-delay:0.3s;">🦅</span>
+   <span class="emoji-float animate-emoji-drift-delayed" style="left:32%;top:68%;">⚓</span>
+   <span class="emoji-float animate-twinkle" style="left:92%;top:62%;">🐺</span>
+   <span class="emoji-float animate-emoji-drift" style="left:18%;top:78%;">🗡️</span>
+   <span class="emoji-float--lg animate-emoji-bounce-soft" style="left:54%;top:34%;animation-delay:0.6s;">🏔️</span>
+   <span class="emoji-float animate-emoji-spin-slow" style="left:40%;top:18%;animation-duration:24s;">⛰️</span>
+  </div>
+
+  <div id="app-container" class="relative z-10 h-full w-full flex flex-col overflow-hidden">
+   <div id="toast-container" class="fixed top-16 left-4 right-4 z-[100] space-y-2 pointer-events-none max-w-md mx-auto"></div>
+   <!-- Login / Signup -->
+   <div id="auth-root" class="auth-screen flex-1">
+    <div class="w-full max-w-sm space-y-6">
+     <div class="text-center">
+      <div class="inline-flex w-14 h-14 rounded-2xl items-center justify-center mb-3 animate-pulse-glow vs-logo-box"><span class="text-2xl">⛵</span></div>
+      <h1 class="text-3xl font-black font-cormorant tracking-tight vs-brand-gradient">Skill Bite</h1>
+      <p class="text-xs text-[#E0D9D9] opacity-70 mt-1 font-cormorant italic">Carve your path · Daily mastery</p>
+     </div>
+     <div id="auth-login-view" class="auth-card auth-view">
+      <h2 class="text-lg font-bold text-white mb-4">Log in</h2>
+      <form id="form-login" class="space-y-3">
+       <div>
+        <label class="text-[10px] uppercase tracking-wider text-[#E0D9D9] opacity-70 font-semibold" for="login-email">Email</label>
+        <input id="login-email" name="email" type="email" autocomplete="email" required class="auth-input mt-1" placeholder="you@company.com">
+       </div>
+       <div>
+        <label class="text-[10px] uppercase tracking-wider text-[#E0D9D9] opacity-70 font-semibold" for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="4" class="auth-input mt-1" placeholder="••••••••">
+       </div>
+       <button type="submit" class="vs-btn-primary w-full py-3 rounded-xl font-bold text-sm transition-all hover:scale-[1.02] active:scale-[0.98]">Sign in</button>
+      </form>
+      <p class="text-center text-xs text-[#E0D9D9] opacity-70 mt-4">No account? <button type="button" onclick="showAuthView('signup')" class="text-[#E0D9D9] font-semibold hover:text-[#5A9690]">Sign up</button></p>
+     </div>
+     <div id="auth-signup-view" class="auth-card auth-view is-hidden">
+      <h2 class="text-lg font-bold text-white mb-4">Create account</h2>
+      <form id="form-signup" class="space-y-3">
+       <div>
+        <label class="text-[10px] uppercase tracking-wider text-[#E0D9D9] opacity-70 font-semibold" for="signup-name">Name</label>
+        <input id="signup-name" name="name" type="text" autocomplete="name" required class="auth-input mt-1" placeholder="Your name">
+       </div>
+       <div>
+        <label class="text-[10px] uppercase tracking-wider text-[#E0D9D9] opacity-70 font-semibold" for="signup-email">Email</label>
+        <input id="signup-email" name="email" type="email" autocomplete="email" required class="auth-input mt-1" placeholder="you@company.com">
+       </div>
+       <div>
+        <label class="text-[10px] uppercase tracking-wider text-[#E0D9D9] opacity-70 font-semibold" for="signup-password">Password</label>
+        <input id="signup-password" name="password" type="password" autocomplete="new-password" required minlength="4" class="auth-input mt-1" placeholder="Min 4 characters">
+       </div>
+       <button type="submit" class="vs-btn-primary w-full py-3 rounded-xl font-bold text-sm transition-all hover:scale-[1.02] active:scale-[0.98]">Create account</button>
+      </form>
+      <p class="text-center text-xs text-[#E0D9D9] opacity-70 mt-4">Already have an account? <button type="button" onclick="showAuthView('login')" class="text-[#E0D9D9] font-semibold hover:text-[#5A9690]">Log in</button></p>
+     </div>
+    </div>
+   </div>
+
+   <!-- Logged-in app -->
+   <div id="main-shell" class="main-app-shell is-hidden flex-1 min-h-0">
+    <div class="header-glow-line flex-shrink-0" aria-hidden="true"></div>
+    <header id="app-header" class="flex-shrink-0 px-4 py-3 flex items-center justify-between gap-2" style="background:rgba(67, 35, 35,0.92);backdrop-filter:blur(24px);border-bottom:1px solid rgba(90, 150, 144,0.28);">
+     <div class="flex items-center gap-3 min-w-0">
+      <button type="button" id="app-menu-btn" class="w-10 h-10 rounded-xl flex items-center justify-center animate-pulse-glow flex-shrink-0 vs-logo-box transition-transform hover:scale-105 active:scale-95" aria-expanded="false" aria-controls="app-menu-panel" aria-label="Open menu" title="Menu">
+       <span class="text-lg animate-emoji-bounce-soft pointer-events-none" style="display:inline-block;">🪓</span>
+      </button>
+      <div class="min-w-0">
+       <h1 id="header-title" class="text-lg font-bold font-cormorant vs-brand-gradient truncate tracking-wide">Skill Bite</h1>
+       <p id="page-title" class="text-[10px] text-[#E0D9D9] opacity-70 font-medium tracking-wider uppercase truncate">Dashboard</p>
+      </div>
+     </div>
+     <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+      <div id="streak-display" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:rgba(90, 150, 144,0.18);border:1px solid rgba(90, 150, 144,0.35);"><span class="animate-streak-fire inline-block">🔥</span> <span id="streak-count" class="text-sm font-bold text-amber-500/95">0</span></div>
+      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:rgba(47, 87, 85,0.28);border:1px solid rgba(90, 150, 144,0.22);"><span class="text-sm animate-twinkle inline-block">⚔️</span> <span id="xp-display" class="text-sm font-bold text-[#E0D9D9]">0</span></div>
+      <button id="notif-btn" type="button" class="relative w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 flex-shrink-0" style="background:rgba(255,255,255,0.04);border:1px solid rgba(90, 150, 144,0.12);"><i data-lucide="bell" style="width:18px;height:18px;color:#5A9690;"></i><span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-600 text-[9px] font-bold flex items-center justify-center">3</span></button>
+     </div>
+    </header>
+
+    <main id="main-content" class="flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 min-h-0" style="scrollbar-gutter:stable;">
+     <!-- Dashboard -->
+     <div id="page-dashboard" class="app-page space-y-5" data-page="dashboard">
+      <section id="welcome-section" class="animate-slide-up">
+       <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-40 h-40 opacity-30" style="background:radial-gradient(circle,rgba(90, 150, 144,0.5),transparent 70%);"></div>
+        <div class="relative z-10 flex flex-col sm:flex-row gap-4 items-stretch">
+         <div class="flex-1 min-w-0">
+          <p class="text-[#E0D9D9] opacity-80 text-sm mb-1">Good <span id="time-greeting">morning</span> <span class="inline-block animate-float">👋</span></p>
+          <h2 id="welcome-text" class="text-xl font-bold mb-3">Ready for today's challenge?</h2>
+          <div class="flex items-center gap-4">
+           <div class="flex-1">
+            <div class="flex justify-between text-xs mb-1.5"><span class="text-[#E0D9D9] opacity-80">Daily Progress</span> <span id="daily-progress-pct" class="text-[#E0D9D9] font-semibold">0%</span></div>
+            <div class="h-2.5 rounded-full overflow-hidden" style="background:rgba(47, 87, 85,0.35);">
+             <div id="daily-progress-bar" class="xp-bar h-full rounded-full" style="width:0%;transition:width 1s ease;"></div>
+            </div>
+           </div>
+           <div class="text-center">
+            <p id="tasks-done" class="text-2xl font-black text-[#5A9690]">0</p>
+            <p class="text-[10px] text-[#E0D9D9] opacity-70 uppercase tracking-wider">of 5</p>
+           </div>
+          </div>
+          <button type="button" onclick="switchPage('daily')" class="vs-btn-primary mt-4 w-full sm:w-auto py-2.5 px-5 rounded-xl text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98]">Go to Daily Task →</button>
+         </div>
+         <div class="welcome-hero-wrap w-full sm:w-28 h-28 sm:min-h-[7rem] sm:h-auto">
+          <span class="welcome-hero-emoji animate-float" aria-hidden="true">🪓</span>
+          <span class="welcome-hero-badge animate-emoji-bounce-soft" aria-hidden="true">✨</span>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section id="weekly-section" class="animate-slide-up" style="animation-delay:0.1s;opacity:0;">
+       <h3 class="text-sm font-semibold text-[#E0D9D9] opacity-80 uppercase tracking-wider mb-3 flex items-center gap-2"><span class="inline-block animate-emoji-drift">🎯</span> Weekly Challenges</h3>
+       <div class="space-y-3">
+        <div class="glass-card rounded-2xl p-4 flex items-center gap-4">
+         <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:rgba(47, 87, 85,0.4);"><span class="animate-emoji-bounce-soft inline-block">⚔️</span></div>
+         <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold">Code Warrior</p>
+          <p class="text-[10px] text-[#E0D9D9] opacity-70 mb-1.5">Finish 5 challenges in Coding, DSA, Web, AI/ML, or CS Core</p>
+          <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(47, 87, 85,0.35);">
+           <div id="weekly-code-warrior-bar" class="h-full rounded-full transition-all duration-500" style="background:linear-gradient(90deg,#2F5755,#5A9690);width:0%;"></div>
+          </div>
+         </div><span id="weekly-code-warrior-count" class="text-xs font-bold text-[#E0D9D9] shrink-0">0/5</span>
+        </div>
+        <div class="glass-card rounded-2xl p-4 flex items-center gap-4">
+         <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:rgba(34,197,94,0.15);"><span class="animate-float inline-block">💪</span></div>
+         <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold">Fitness Challenges</p>
+          <p class="text-[10px] text-[#E0D9D9] opacity-70 mb-1.5">Complete 3 Fitness category challenges</p>
+          <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(34,197,94,0.15);">
+           <div id="weekly-fitness-bar" class="h-full rounded-full transition-all duration-500" style="background:linear-gradient(90deg,#22c55e,#10b981);width:0%;"></div>
+          </div>
+         </div><span id="weekly-fitness-count" class="text-xs font-bold text-green-400 shrink-0">0/3</span>
+        </div>
+        <div class="glass-card rounded-2xl p-4 flex items-center gap-4">
+         <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:rgba(59,130,246,0.15);"><span class="animate-twinkle inline-block">🎯</span></div>
+         <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold">Focus Master</p>
+          <p class="text-[10px] text-[#E0D9D9] opacity-70 mb-1.5">Get 3 perfect scores (5/5) on any challenges</p>
+          <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(59,130,246,0.15);">
+           <div id="weekly-focus-bar" class="h-full rounded-full transition-all duration-500" style="background:linear-gradient(90deg,#3b82f6,#0ea5e9);width:0%;"></div>
+          </div>
+         </div><span id="weekly-focus-count" class="text-xs font-bold text-sky-400 shrink-0">0/3</span>
+        </div>
+        <div class="glass-card rounded-2xl p-4 flex items-center gap-4">
+         <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:rgba(236,72,153,0.15);"><span class="animate-emoji-drift inline-block">🎨</span></div>
+         <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold">Creativity Boost</p>
+          <p class="text-[10px] text-[#E0D9D9] opacity-70 mb-1.5">Complete 3 Creativity category challenges</p>
+          <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(236,72,153,0.15);">
+           <div id="weekly-creativity-bar" class="h-full rounded-full transition-all duration-500" style="background:linear-gradient(90deg,#ec4899,#a855f7);width:0%;"></div>
+          </div>
+         </div><span id="weekly-creativity-count" class="text-xs font-bold text-pink-400 shrink-0">0/3</span>
+        </div>
+       </div>
+      </section>
+     </div>
+
+     <!-- Daily Task -->
+     <div id="page-daily" class="app-page hidden space-y-5" data-page="daily">
+      <section id="categories-section" class="animate-slide-up" style="animation-delay:0.05s;opacity:0;">
+       <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+        <h3 class="text-sm font-semibold text-[#E0D9D9] opacity-80 uppercase tracking-wider">Pick a category</h3>
+        <div class="section-emoji-row" aria-hidden="true"><span class="animate-emoji-bounce-soft">💻</span><span class="animate-twinkle">🧠</span><span class="animate-emoji-drift">🎨</span><span class="animate-emoji-bounce-soft" style="animation-delay:0.4s;">⛵</span></div>
+       </div>
+       <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3" id="skill-categories"></div>
+      </section>
+      <section id="challenge-panel" class="hidden">
+       <div class="glass-card rounded-2xl p-5 relative overflow-hidden" style="border-color:rgba(90, 150, 144,0.35);">
+        <div class="absolute inset-0 animate-shimmer"></div>
+        <div class="relative z-10">
+         <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2"><span id="challenge-icon" class="text-2xl inline-block animate-float">💻</span>
+           <div>
+            <h3 id="challenge-category-label" class="text-sm font-bold text-[#E0D9D9]">Coding Challenge</h3>
+            <p id="challenge-difficulty" class="text-[10px] text-[#E0D9D9] opacity-70 uppercase tracking-wider">Medium</p>
+           </div>
+          </div>
+          <div class="flex items-center gap-2">
+           <div class="flex items-center gap-1 px-2.5 py-1 rounded-lg" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);"><i data-lucide="clock" style="width:12px;height:12px;color:#f87171;"></i> <span id="timer-display" class="text-sm font-mono font-bold text-red-400 challenge-timer">10:00</span></div>
+           <button type="button" onclick="cancelChallenge()" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background:rgba(255,255,255,0.05);"><i data-lucide="x" style="width:16px;height:16px;color:#9ca3af;"></i></button>
+          </div>
+         </div>
+         <div id="challenge-quiz-mode">
+          <div id="challenge-question" class="mb-5">
+           <p id="question-text" class="text-base font-medium leading-relaxed mb-4"></p>
+           <div id="options-container" class="space-y-2.5"></div>
+          </div>
+          <div id="challenge-progress-dots" class="flex items-center justify-center gap-2 mb-4"><span class="w-2.5 h-2.5 rounded-full bg-[#4a7a8c]"></span> <span class="w-2.5 h-2.5 rounded-full bg-gray-700"></span> <span class="w-2.5 h-2.5 rounded-full bg-gray-700"></span> <span class="w-2.5 h-2.5 rounded-full bg-gray-700"></span> <span class="w-2.5 h-2.5 rounded-full bg-gray-700"></span></div>
+          <div class="flex items-center justify-between"><span id="question-counter" class="text-xs text-[#E0D9D9] opacity-70">Question 1 of 5</span> <span id="xp-reward" class="text-xs font-semibold text-[#5A9690]">+20 XP</span></div>
+         </div>
+         <div id="challenge-coding-mode" class="hidden">
+          <p id="coding-problem-meta" class="text-[10px] text-[#E0D9D9] opacity-70 mb-2 font-mono">Round 1/5 · Problem #1</p>
+          <h4 id="coding-problem-title" class="text-base font-bold text-[#E0D9D9] mb-2">Title</h4>
+          <p id="coding-problem-desc" class="text-sm text-[#E0D9D9] opacity-80 leading-relaxed mb-3"></p>
+          <div class="coding-stdin-hint mb-3">
+           <p class="text-[10px] uppercase tracking-wider text-[#E0D9D9] opacity-70 mb-1">Sample stdin</p>
+           <pre id="coding-stdin-preview" class="coding-stdin-preview font-mono text-xs"></pre>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+           <label class="text-[10px] text-[#E0D9D9] opacity-70 uppercase tracking-wider sr-only" for="coding-lang-select">Language</label>
+           <select id="coding-lang-select" class="coding-select" title="Language">
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="cpp">C++</option>
+            <option value="c">C</option>
+            <option value="java">Java</option>
+           </select>
+           <button type="button" id="coding-run-btn" onclick="execCodingRun()" class="coding-btn coding-btn--run">Run</button>
+           <button type="button" id="coding-submit-btn" onclick="submitCodingSolution()" class="coding-btn coding-btn--submit">Submit</button>
+          </div>
+          <label class="text-[10px] uppercase tracking-wider text-[#E0D9D9] opacity-70 mb-1 block">Editor</label>
+          <textarea id="coding-editor" class="coding-editor font-mono text-xs w-full" rows="12" spellcheck="false" autocomplete="off"></textarea>
+          <div class="coding-terminal-wrap mt-3">
+           <div class="coding-terminal-header"><span class="coding-terminal-dots" aria-hidden="true"></span><span>Output</span></div>
+           <pre id="coding-terminal-output" class="coding-terminal-output font-mono text-xs" aria-live="polite"></pre>
+          </div>
+          <div id="coding-progress-dots" class="flex items-center justify-center gap-2 mt-4 mb-2"></div>
+          <div class="flex items-center justify-between"><span id="coding-round-label" class="text-xs text-[#E0D9D9] opacity-70">Problem 1 of 5</span> <span class="text-xs font-semibold text-[#5A9690]">Solve with Run → Submit</span></div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section id="result-panel" class="hidden">
+       <div class="glass-card rounded-2xl p-6 text-center relative overflow-hidden">
+        <div id="result-particles" class="particle-container inset-0"></div>
+        <div class="relative z-10">
+         <div id="result-emoji" class="text-5xl mb-3 animate-float inline-block">🏆</div>
+         <h3 id="result-title" class="text-xl font-black mb-1"></h3>
+         <p id="result-subtitle" class="text-sm text-[#E0D9D9] opacity-80 mb-4"></p>
+         <div class="flex justify-center gap-6 mb-5">
+          <div class="text-center"><p id="result-correct" class="text-2xl font-black text-green-400">0</p><p class="text-[10px] text-[#E0D9D9] opacity-70 uppercase">Correct</p></div>
+          <div class="text-center"><p id="result-xp" class="text-2xl font-black text-[#5A9690]">0</p><p class="text-[10px] text-[#E0D9D9] opacity-70 uppercase">XP Earned</p></div>
+          <div class="text-center"><p id="result-time" class="text-2xl font-black text-blue-400">0s</p><p class="text-[10px] text-[#E0D9D9] opacity-70 uppercase">Time</p></div>
+         </div>
+         <button type="button" onclick="closeResult()" class="vs-btn-primary w-full py-3 rounded-xl font-bold text-sm transition-all hover:scale-[1.02] active:scale-[0.98]">Continue</button>
+        </div>
+       </div>
+      </section>
+     </div>
+
+     <!-- Leaderboard -->
+     <div id="page-leaderboard" class="app-page hidden space-y-5" data-page="leaderboard">
+      <section id="leaderboard-section" class="animate-slide-up" style="animation-delay:0.05s;opacity:0;">
+       <div class="flex items-center justify-between mb-3 gap-2 flex-wrap">
+        <h3 class="text-sm font-semibold text-[#E0D9D9] opacity-80 uppercase tracking-wider flex items-center gap-2"><span class="animate-emoji-bounce-soft inline-block">🏆</span> Daily Leaderboard</h3>
+        <button type="button" onclick="showBattleModal()" class="text-[10px] font-bold text-[#E0D9D9] uppercase tracking-wider hover:text-[#5A9690] transition-colors flex items-center gap-1"><i data-lucide="swords" style="width:12px;height:12px;"></i> Battle</button>
+       </div>
+       <div class="glass-card rounded-2xl overflow-hidden">
+        <div class="leaderboard-banner">
+         <p class="absolute bottom-2 left-4 text-xs font-semibold text-[#d8e4ec]/95 flex items-center gap-2 z-[1]"><span class="text-base">🥇</span> Top performers today</p>
+        </div>
+        <div id="leaderboard-list" class="divide-y divide-gray-800/50">
+         <div class="leaderboard-row flex items-center gap-3 p-3.5"><span class="text-lg w-7 text-center">🥇</span>
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold" style="background:linear-gradient(135deg,#f59e0b,#f97316);">A</div>
+          <div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">Alex Chen</p><p class="text-[10px] text-[#E0D9D9] opacity-70">Level 15 · Grandmaster</p></div><span class="text-sm font-bold text-amber-400 font-mono">2,450</span>
+         </div>
+         <div class="leaderboard-row flex items-center gap-3 p-3.5"><span class="text-lg w-7 text-center">🥈</span>
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold" style="background:linear-gradient(135deg,#2F5755,#432323);">S</div>
+          <div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">Sara Wilson</p><p class="text-[10px] text-[#E0D9D9] opacity-70">Level 13 · Master</p></div><span class="text-sm font-bold text-gray-300 font-mono">2,180</span>
+         </div>
+         <div class="leaderboard-row flex items-center gap-3 p-3.5"><span class="text-lg w-7 text-center">🥉</span>
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">R</div>
+          <div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">Raj Kumar</p><p class="text-[10px] text-[#E0D9D9] opacity-70">Level 12 · Expert</p></div><span class="text-sm font-bold text-orange-300 font-mono">1,920</span>
+         </div>
+         <div class="leaderboard-row flex items-center gap-3 p-3.5" style="background:rgba(47, 87, 85,0.18);"><span class="text-sm w-7 text-center font-bold text-[#E0D9D9] opacity-70">4</span>
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold" style="background:linear-gradient(135deg,#10b981,#059669);"><span id="leaderboard-avatar-initial">Y</span></div>
+          <div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate"><span id="leaderboard-you-label">You</span> <span class="text-[10px] text-[#E0D9D9] ml-1">← You</span></p><p id="your-level-text" class="text-[10px] text-[#E0D9D9] opacity-70">Level 1 · Beginner</p></div><span id="leaderboard-your-xp" class="text-sm font-bold text-green-400 font-mono">0</span>
+         </div>
+        </div>
+       </div>
+      </section>
+     </div>
+
+     <!-- Profile -->
+     <div id="page-profile" class="app-page hidden space-y-5" data-page="profile">
+      <section class="animate-slide-up">
+       <div class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+        <div id="profile-avatar" class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black flex-shrink-0 vs-logo-box">?</div>
+        <div class="flex-1 min-w-0">
+         <h2 id="profile-name" class="text-lg font-bold truncate">Player</h2>
+         <p id="profile-email" class="text-xs text-[#E0D9D9] opacity-70 truncate">—</p>
+         <p id="header-subtitle" class="text-[10px] text-gray-600 mt-1 uppercase tracking-wider">Daily saga · sharpen the edge</p>
+        </div>
+        <button type="button" onclick="logout()" class="w-full sm:w-auto py-2.5 px-4 rounded-xl text-sm font-semibold text-gray-300 hover:text-white transition-colors flex-shrink-0" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);">Log out</button>
+       </div>
+      </section>
+      <section id="badges-section" class="animate-slide-up" style="animation-delay:0.1s;opacity:0;">
+       <h3 class="text-sm font-semibold text-[#E0D9D9] opacity-80 uppercase tracking-wider mb-3 flex items-center gap-2"><span class="animate-twinkle inline-block">🏅</span> Badges</h3>
+       <div class="grid grid-cols-3 gap-3" id="badges-grid">
+        <div class="glass-card rounded-2xl p-3 flex flex-col items-center gap-2 text-center badge-item" data-badge="first_bite"><div class="badge-emoji" aria-hidden="true">🎯</div><p class="badge-label text-[10px] font-medium">First Bite</p></div>
+        <div class="glass-card rounded-2xl p-3 flex flex-col items-center gap-2 text-center badge-item" data-badge="streak_3"><div class="badge-emoji" aria-hidden="true">🔥</div><p class="badge-label text-[10px] font-medium">3-Day Streak</p></div>
+        <div class="glass-card rounded-2xl p-3 flex flex-col items-center gap-2 text-center badge-item" data-badge="streak_7"><div class="badge-emoji" aria-hidden="true">👑</div><p class="badge-label text-[10px] font-medium">7-Day Streak</p></div>
+        <div class="glass-card rounded-2xl p-3 flex flex-col items-center gap-2 text-center badge-item" data-badge="xp_100"><div class="badge-emoji" aria-hidden="true">💎</div><p class="badge-label text-[10px] font-medium">100 XP</p></div>
+        <div class="glass-card rounded-2xl p-3 flex flex-col items-center gap-2 text-center badge-item" data-badge="perfect"><div class="badge-emoji" aria-hidden="true">⭐</div><p class="badge-label text-[10px] font-medium">Perfect Score</p></div>
+        <div class="glass-card rounded-2xl p-3 flex flex-col items-center gap-2 text-center badge-item" data-badge="all_cats"><div class="badge-emoji" aria-hidden="true">🌈</div><p class="badge-label text-[10px] font-medium">All Rounder</p></div>
+       </div>
+      </section>
+      <section id="analytics-section" class="animate-slide-up" style="animation-delay:0.15s;opacity:0;">
+       <h3 class="text-sm font-semibold text-[#E0D9D9] opacity-80 uppercase tracking-wider mb-3 flex items-center gap-2"><span class="inline-block animate-emoji-spin-slow" style="animation-duration:12s;">📊</span> Skill Analytics</h3>
+       <div class="glass-card rounded-2xl p-5 relative overflow-hidden max-h-[70vh] overflow-y-auto">
+        <div id="analytics-rows" class="space-y-3 relative z-10"></div>
+        <div id="weak-area-hint" class="mt-4 p-3 rounded-xl text-xs hidden relative z-10" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);"><span class="text-red-400 font-semibold">⚠️ Weak Area Detected: </span> <span id="weak-area-name" class="text-gray-300"></span></div>
+       </div>
+      </section>
+     </div>
+
+     <div class="h-20"></div>
+    </main>
+
+    <nav class="flex-shrink-0 flex items-center justify-around px-1 sm:px-2 py-2" style="background:rgba(67, 35, 35,0.96);backdrop-filter:blur(24px);border-top:1px solid rgba(90, 150, 144,0.3);">
+     <button type="button" onclick="switchPage('dashboard')" class="nav-item active flex flex-col items-center gap-0.5 px-2 sm:px-4 py-2 rounded-xl border border-transparent" data-tab="dashboard"><i data-lucide="layout-dashboard" style="width:20px;height:20px;"></i><span class="text-[10px] font-medium">Dashboard</span></button>
+     <button type="button" onclick="switchPage('daily')" class="nav-item flex flex-col items-center gap-0.5 px-2 sm:px-4 py-2 rounded-xl border border-transparent" data-tab="daily"><i data-lucide="clipboard-list" style="width:20px;height:20px;"></i><span class="text-[10px] font-medium">Daily Task</span></button>
+     <button type="button" onclick="switchPage('leaderboard')" class="nav-item flex flex-col items-center gap-0.5 px-2 sm:px-4 py-2 rounded-xl border border-transparent" data-tab="leaderboard"><i data-lucide="trophy" style="width:20px;height:20px;"></i><span class="text-[10px] font-medium">Leaderboard</span></button>
+     <button type="button" onclick="switchPage('profile')" class="nav-item flex flex-col items-center gap-0.5 px-2 sm:px-4 py-2 rounded-xl border border-transparent" data-tab="profile"><i data-lucide="user" style="width:20px;height:20px;"></i><span class="text-[10px] font-medium">Profile</span></button>
+    </nav>
+
+    <div id="battle-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);">
+     <div class="glass-card rounded-3xl p-6 w-full max-w-sm animate-slide-up relative overflow-hidden" style="border-color:rgba(90, 150, 144,0.38);">
+      <div class="absolute -top-4 -right-4 text-6xl opacity-10 pointer-events-none animate-float" aria-hidden="true">⚔️</div>
+      <div class="text-center mb-5 relative z-10">
+       <h3 class="text-lg font-black mb-1 flex items-center justify-center gap-2"><span class="animate-emoji-bounce-soft">⚔️</span> Friend Battle</h3>
+       <p class="text-xs text-[#E0D9D9] opacity-70">Challenge a friend to a skill duel!</p>
+      </div>
+      <div class="flex items-center justify-center gap-4 mb-6">
+       <div class="text-center">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-2 relative" style="background:linear-gradient(135deg,#10b981,#059669);"><span id="battle-you-initial">Y</span><span class="absolute -bottom-1 -right-1 text-lg animate-twinkle">✨</span></div>
+        <p class="text-xs font-semibold">You</p>
+       </div><span class="battle-vs text-3xl font-black">VS</span>
+       <div class="text-center">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-2" style="background:linear-gradient(135deg,#f59e0b,#f97316);">?</div>
+        <p class="text-xs font-semibold text-[#E0D9D9] opacity-80">Opponent</p>
+       </div>
+      </div>
+      <div class="space-y-2 mb-5">
+       <button type="button" onclick="startBattle('Alex Chen')" class="w-full py-3 px-4 rounded-xl flex items-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]" style="background:rgba(47, 87, 85,0.2);border:1px solid rgba(90, 150, 144,0.32);"><div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:linear-gradient(135deg,#f59e0b,#f97316);">A</div><span class="text-sm font-medium">Alex Chen</span><span class="ml-auto text-[10px] text-green-400">● Online</span></button>
+       <button type="button" onclick="startBattle('Sara Wilson')" class="w-full py-3 px-4 rounded-xl flex items-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]" style="background:rgba(47, 87, 85,0.2);border:1px solid rgba(90, 150, 144,0.32);"><div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:linear-gradient(135deg,#2F5755,#432323);">S</div><span class="text-sm font-medium">Sara Wilson</span><span class="ml-auto text-[10px] text-green-400">● Online</span></button>
+       <button type="button" onclick="startBattle('Raj Kumar')" class="w-full py-3 px-4 rounded-xl flex items-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]" style="background:rgba(47, 87, 85,0.2);border:1px solid rgba(90, 150, 144,0.32);"><div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">R</div><span class="text-sm font-medium">Raj Kumar</span><span class="ml-auto text-[10px] text-[#E0D9D9] opacity-70">● Away</span></button>
+      </div>
+      <button type="button" onclick="closeBattleModalWithSound()" class="w-full py-2.5 rounded-xl text-sm text-[#E0D9D9] opacity-80 hover:text-white transition-colors" style="background:rgba(255,255,255,0.05);">Cancel</button>
+     </div>
+    </div>
+    <div id="settings-modal" class="fixed inset-0 z-[52] hidden flex items-center justify-center p-4" style="background:rgba(0,0,0,0.72);backdrop-filter:blur(8px);" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+     <div class="absolute inset-0" onclick="closeSettingsModalWithSound()" aria-hidden="true"></div>
+     <div class="glass-card rounded-3xl p-6 w-full max-w-sm animate-slide-up relative z-10 overflow-hidden" style="border-color:rgba(90, 150, 144,0.38);">
+      <div class="flex items-center justify-between gap-3 mb-5">
+       <h2 id="settings-modal-title" class="text-lg font-bold font-cormorant flex items-center gap-2"><i data-lucide="settings" style="width:20px;height:20px;"></i> Settings</h2>
+       <button type="button" onclick="closeSettingsModalWithSound()" class="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors" aria-label="Close settings"><i data-lucide="x" style="width:20px;height:20px;color:#94a3b8;"></i></button>
+      </div>
+      <div class="space-y-5">
+       <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+         <p class="text-sm font-semibold text-gray-200">Sound effects</p>
+         <p class="text-[10px] text-[#E0D9D9] opacity-70 mt-0.5">Short feedback when you answer challenges</p>
+        </div>
+        <label class="settings-toggle shrink-0 cursor-pointer"><input type="checkbox" id="setting-sound" class="settings-toggle-input sr-only"><span class="settings-toggle-ui"></span></label>
+       </div>
+       <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+         <p class="text-sm font-semibold text-gray-200">Daily reminder</p>
+         <p class="text-[10px] text-[#E0D9D9] opacity-70 mt-0.5">Nudge to complete your bite (stored locally)</p>
+        </div>
+        <label class="settings-toggle shrink-0 cursor-pointer"><input type="checkbox" id="setting-reminder" class="settings-toggle-input sr-only"><span class="settings-toggle-ui"></span></label>
+       </div>
+       <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+         <p class="text-sm font-semibold text-gray-200">Reduced motion</p>
+         <p class="text-[10px] text-[#E0D9D9] opacity-70 mt-0.5">Less background &amp; emoji animation</p>
+        </div>
+        <label class="settings-toggle shrink-0 cursor-pointer"><input type="checkbox" id="setting-reduced-motion" class="settings-toggle-input sr-only"><span class="settings-toggle-ui"></span></label>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div id="app-menu-panel" class="app-menu-overlay fixed inset-0 z-[55] hidden" role="dialog" aria-modal="true" aria-labelledby="app-menu-title">
+     <div class="absolute inset-0 bg-black/65 backdrop-blur-sm" onclick="closeAppMenuWithSound()" aria-hidden="true"></div>
+     <aside class="app-menu-drawer absolute left-0 top-0 h-full w-full max-w-sm flex flex-col shadow-2xl animate-slide-left">
+      <div class="p-5 flex items-center justify-between gap-3 border-b border-white/10" style="background:rgba(47, 87, 85,0.96);">
+       <h2 id="app-menu-title" class="text-lg font-bold font-cormorant vs-brand-gradient">Menu</h2>
+       <button type="button" onclick="closeAppMenu()" class="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:bg-white/10" aria-label="Close menu"><i data-lucide="x" style="width:20px;height:20px;color:#94a3b8;"></i></button>
+      </div>
+      <nav class="flex-1 overflow-y-auto p-3 space-y-1" aria-label="App navigation">
+       <button type="button" class="app-menu-item" onclick="menuNavigate('dashboard')"><i data-lucide="layout-dashboard" style="width:18px;height:18px;"></i><span>Dashboard</span></button>
+       <button type="button" class="app-menu-item" onclick="menuNavigate('daily')"><i data-lucide="clipboard-list" style="width:18px;height:18px;"></i><span>Daily Task</span></button>
+       <button type="button" class="app-menu-item" onclick="menuNavigate('leaderboard')"><i data-lucide="trophy" style="width:18px;height:18px;"></i><span>Leaderboard</span></button>
+       <button type="button" class="app-menu-item" onclick="menuNavigate('profile')"><i data-lucide="user" style="width:18px;height:18px;"></i><span>Profile</span></button>
+       <div class="my-3 h-px bg-white/10"></div>
+       <button type="button" class="app-menu-item" onclick="menuNavigate('settings')"><i data-lucide="settings" style="width:18px;height:18px;"></i><span>Settings</span></button>
+       <button type="button" class="app-menu-item" onclick="openNotifsFromMenu()"><i data-lucide="bell" style="width:18px;height:18px;"></i><span>Notifications</span></button>
+      </nav>
+      <div class="p-4 border-t border-white/10 text-[10px] text-gray-600 text-center" style="background:rgba(4,8,12,0.95);">Skill Bite · Vinland</div>
+     </aside>
+    </div>
+    <div id="notif-panel" class="fixed inset-0 z-50 hidden" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);">
+     <div class="absolute right-0 top-0 h-full w-full max-w-sm animate-slide-right" style="background:rgba(67, 35, 35,0.97);border-left:1px solid rgba(90, 150, 144,0.3);">
+      <div class="p-5">
+       <div class="flex items-center justify-between mb-5">
+        <h3 class="font-bold text-lg flex items-center gap-2"><span class="animate-emoji-bounce-soft">🔔</span> Notifications</h3><button type="button" onclick="closeNotifs()" class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(255,255,255,0.05);"><i data-lucide="x" style="width:18px;height:18px;color:#9ca3af;"></i></button>
+       </div>
+       <div class="space-y-3">
+        <div class="p-3 rounded-xl" style="background:rgba(47, 87, 85,0.28);border:1px solid rgba(90, 150, 144,0.28);"><div class="flex items-start gap-3"><span class="text-lg mt-0.5 inline-block animate-twinkle">⚡</span><div><p class="text-sm font-semibold">Daily Bite Ready!</p><p class="text-xs text-[#E0D9D9] opacity-80 mt-0.5">Your coding challenge is waiting. Don't break your streak!</p><p class="text-[10px] text-gray-600 mt-1">2 min ago</p></div></div></div>
+        <div class="p-3 rounded-xl" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.15);"><div class="flex items-start gap-3"><span class="text-lg mt-0.5 inline-block animate-float">⚔️</span><div><p class="text-sm font-semibold">Battle Invite!</p><p class="text-xs text-[#E0D9D9] opacity-80 mt-0.5">Alex Chen challenged you to a coding duel!</p><p class="text-[10px] text-gray-600 mt-1">15 min ago</p></div></div></div>
+        <div class="p-3 rounded-xl" style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.15);"><div class="flex items-start gap-3"><span class="text-lg mt-0.5 inline-block animate-streak-fire">🔥</span><div><p class="text-sm font-semibold">Streak Reminder</p><p class="text-xs text-[#E0D9D9] opacity-80 mt-0.5">Complete today's bite to keep your streak alive!</p><p class="text-[10px] text-gray-600 mt-1">1 hour ago</p></div></div></div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="coding-problems.js"></script>
+  <script src="app.js"></script>
+ </body>
+</html>
